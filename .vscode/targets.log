@@ -6,12 +6,18 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Apr 12 20:53:07 2026
+# Make data base, printed on Fri May 29 17:18:35 2026
 
 # Variables
 
 # environment
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
 SYSTEMDRIVE = C:
+# environment
+EFC_12252_2283032206 = 1
+# environment
+EFC_12252_3789132940 = 1
 # environment
 LC_ALL = C
 # environment
@@ -23,7 +29,7 @@ LOCALAPPDATA = C:\Users\ivano\AppData\Local
 # environment
 VSCODE_CRASH_REPORTER_PROCESS_TYPE = extensionHost
 # environment
-VSCODE_CWD = C:\Microsoft VS Code
+VSCODE_CWD = C:\Users\ivano\Downloads
 # environment
 SYSTEMROOT = C:\WINDOWS
 # environment
@@ -32,14 +38,12 @@ PROCESSOR_LEVEL = 6
 PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
 # default
 MAKE_COMMAND := C:/Users/ivano/scoop/apps/make/current/bin/make.exe
-# environment
-OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT = true
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_22136_ROKQQFKQZSHTRGZE
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_5404_RAGZWELVTJEHYIFZ
 # environment
-COPILOT_OTEL_EXPORTER_TYPE = file
+FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -47,18 +51,15 @@ VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 %D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
 # environment
-EFC_7920_3789132940 = 1
+IGCCSVC_DB = AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAMmGbpJvxHkmwuxvGFM+FyQQAAAACAAAAAAAQZgAAAAEAACAAAAB0qG3lYUiETgmZ6CngUWF8dbjFxSCEnlM6JhmdWhX4eQAAAAAOgAAAAAIAACAAAACb+8qARLUz+FkYR4vWEp9cbfhbhb4O0WnrJrMAPSBytGAAAAA6Ab8sRBlMIwXPoN2y4gAbYd5M3EN+wETDiBk0nlRTO+sYAQKod46qgNqDKi6dCMUiyVHLJFpAnUoATWkvcF8jaoasEaKmXS9ndoS8EkdFMZTueyTp/FvTyemY50i4RWdAAAAASVX4E1Radii8vvKLqjCxoFXbYpht1eHOtaClFctUt71/37CKTySpEVYoc1qkAbf54c2b4TgXgEymcZ+QfRIyxQ==
 # environment
-IGCCSVC_DB = AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAMmGbpJvxHkmwuxvGFM+FyQQAAAACAAAAAAAQZgAAAAEAACAAA 
-make: *** No rule to make target 'all'.  Stop.
-
-AB0qG3lYUiETgmZ6CngUWF8dbjFxSCEnlM6JhmdWhX4eQAAAAAOgAAAAAIAACAAAACb+8qARLUz+FkYR4vWEp9cbfhbhb4O0WnrJrMAPSBytGAAAAA6Ab8sRBlMIwXPoN2y4gAbYd5M3EN+wETDiBk0nlRTO+sYAQKod46qgNqDKi6dCMUiyVHLJFpAnUoATWkvcF8jaoasEaKmXS9ndoS8EkdFMZTueyTp/FvTyemY50i4RWdAAAAASVX4E1Radii8vvKLqjCxoFXbYpht1eHOtaClFctUt71/37CKTySpEVYoc1qkAbf54c2b4TgXgEymcZ+QfRIyxQ==
+EFC_12252_1592913036 = 1
 # automatic
 ^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = C:\Users\ivano\AppData\Roaming\Code\CachedData\e7fb5e96c0730b9deb70b33781f98e2f35975036
+VSCODE_CODE_CACHE_PATH = C:\Users\ivano\AppData\Roaming\Code\CachedData\6a49527b96e326fe62fbdb56f60e16877c9aa724
 # environment
 LANG = C
 # default
@@ -77,8 +78,6 @@ ONEDRIVE = C:\Users\ivano\OneDrive
 CURDIR := d:/backend-android
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
-# environment
-VSCODE_L10N_BUNDLE_LOCATION = file:///c%3A/Users/ivano/.vscode/extensions/ms-ceintl.vscode-language-pack-ru-1.110.2026041114/translations/extensions/vscode.json-language-features.i18n.json
 # automatic
 *D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
 # environment
@@ -89,20 +88,18 @@ MFLAGS = -pqrR
 .SHELLFLAGS := -c
 # environment
 COMMONPROGRAMW6432 = C:\Program Files\Common Files
-# environment
-COPILOT_OTEL_FILE_EXPORTER_PATH = \\.\nul
 # automatic
 +D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# environment
+EFC_12252_1262719628 = 1
 # makefile
 MAKEFILE_LIST := 
-# environment
-EFC_7920_2775293581 = 1
 # automatic
 @F = $(notdir $@)
 # environment
 PT8HOME = D:\Cisco Packet Tracer 8.2.2
 # environment
-VSCODE_PID = 22136
+VSCODE_PID = 5404
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
 # automatic
@@ -110,7 +107,7 @@ VSCODE_PID = 22136
 # automatic
 <D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
 # environment
-VSCODE_NLS_CONFIG = {"userLocale":"ru","osLocale":"ru","resolvedLanguage":"ru","defaultMessagesFile":"C:\\Microsoft VS Code\\e7fb5e96c0\\resources\\app\\out\\nls.messages.json","languagePack":{"translationsConfigFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\tcf.json","messagesFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\e7fb5e96c0730b9deb70b33781f98e2f35975036\\nls.messages.json","corruptMarkerFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\corrupted.info"},"locale":"ru","availableLanguages":{"*":"ru"},"_languagePackId":"9f8e2bff591a5b26bf1facb529c1bd82.ru","_languagePackSupport":true,"_translationsConfigFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\tcf.json","_cacheRoot":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru","_resolvedLanguagePackCoreLocation":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\e7fb5e96c0730b9deb70b33781f98e2f35975036","_corruptedFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\9f8e2bff591a5b26bf1facb529c1bd82.ru\\corrupted.info"}
+VSCODE_NLS_CONFIG = {"userLocale":"ru","osLocale":"ru","resolvedLanguage":"ru","defaultMessagesFile":"C:\\Users\\ivano\\AppData\\Local\\Programs\\Microsoft VS Code\\6a49527b96\\resources\\app\\out\\nls.messages.json","languagePack":{"translationsConfigFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\tcf.json","messagesFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\6a49527b96e326fe62fbdb56f60e16877c9aa724\\nls.messages.json","corruptMarkerFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\corrupted.info"},"locale":"ru","availableLanguages":{"*":"ru"},"_languagePackId":"f07150d373c40a13d67b7c744f68cbca.ru","_languagePackSupport":true,"_translationsConfigFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\tcf.json","_cacheRoot":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru","_resolvedLanguagePackCoreLocation":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\6a49527b96e326fe62fbdb56f60e16877c9aa724","_corruptedFile":"C:\\Users\\ivano\\AppData\\Roaming\\Code\\clp\\f07150d373c40a13d67b7c744f68cbca.ru\\corrupted.info"}
 # default
 MAKE_HOST := Windows32
 # environment
@@ -126,15 +123,13 @@ DRIVERDATA = C:\Windows\System32\Drivers\DriverData
 # environment
 COMSPEC = C:\WINDOWS\system32\cmd.exe
 # environment
-EFC_7920_1592913036 = 1
-# environment
 WINDIR = C:\WINDOWS
 # environment
 MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = C:\Microsoft VS Code;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\MinGW\bin;C:\Program Files\Git\cmd;D:\PuTTY\;C:\Program Files\CMake\bin;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\GitHub CLI\;C:\Users\ivano\scoop\shims;C:\Users\ivano\AppData\Local\Microsoft\WindowsApps;;C:\Program Files\JetBrains\PyCharm Community Edition 2024.1.1\bin;;C:\Microsoft VS Code\bin;C:\Users\ivano\.dotnet\tools;C:\Users\ivano\AppData\Local\Android\Sdk\platform-tools
+PATH = C:\Program Files\Google\Chrome\Application;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\MinGW\bin;C:\Program Files\Git\cmd;D:\PuTTY\;C:\Program Files\CMake\bin;C:\Program Files\NVIDIA Corporation\NVIDIA App\NvDLISR;C:\Program Files\dotnet\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files\GitHub CLI\;;C:\Users\ivano\scoop\shims;C:\Users\ivano\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\PyCharm Community Edition 2024.1.1\bin;C:\Users\ivano\.dotnet\tools;C:\Users\ivano\AppData\Local\Android\Sdk\platform-tools;C:\Users\ivano\AppData\Local\Programs\Microsoft VS Code\bin;D:\ModelSim\modelsim_ase\win32aloem;C:\altera_lite\25.1std\questa_fse\win64;C:\altera_lite\25.1std\questa_fe\win64;C:\Users\ivano\AppData\Local\Programs\MiKTeX\miktex\bin\x64\
 # environment
 ZES_ENABLE_SYSMAN = 1
 # environment
@@ -150,17 +145,19 @@ APPLICATION_INSIGHTS_NO_STATSBEAT = true
 # environment
 LOGONSERVER = \\AORUS1337
 # environment
+QSYS_ROOTDIR = C:/altera_lite/25.1std\quartus\sopc_builder\bin
+# environment
 USERNAME = ivano
 # environment
 COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
 # automatic
 ?F = $(notdir $?)
 # environment
+EFC_12252_2775293581 = 1
+# environment
 PROGRAMW6432 = C:\Program Files
 # environment
 PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
-# environment
-EFC_7920_1262719628 = 1
 # automatic
 +F = $(notdir $+)
 # environment
@@ -182,11 +179,13 @@ NUMBER_OF_PROCESSORS = 16
 # environment
 PUBLIC = C:\Users\Public
 # environment
+QUARTUS_ROOTDIR = C:\altera_lite\25.1std\quartus
+# environment
+SOPC_KIT_NIOS2 = C:\altera_lite\25.1std\nios2eds
+# environment
 APPDATA = C:\Users\ivano\AppData\Roaming
 # environment
 HOMEDRIVE = C:
-# environment
-COPILOT_OTEL_ENABLED = true
 # environment
 PROCESSOR_ARCHITECTURE = x86
 # environment
@@ -198,7 +197,7 @@ ELECTRON_RUN_AS_NODE = 1
 # environment
 TEMP = C:\Users\ivano\AppData\Local\Temp
 # environment
-VSCODE_IPC_HOOK = \\.\pipe\8c9e5a55-1.114.0-main-sock
+VSCODE_IPC_HOOK = \\.\pipe\8c9e5a55-1.122.0-main-sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -209,8 +208,6 @@ SUFFIXES :=
 ALLUSERSPROFILE = C:\ProgramData
 # environment
 SESSIONNAME = Console
-# environment
-EFC_7920_2283032206 = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs notintermediate shell-export archives jobserver output-sync load dospaths
 # environment
@@ -228,9 +225,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 154 Stepping 3, GenuineIntel
 
 # Directories
 
-# . (key d:/backend-android, mtime 1775233857): 12 files, no impossibilities.
+# . (key d:/backend-android, mtime 1779027544): 13 files, no impossibilities.
 
-# 12 files, no impossibilities in 1 directories.
+# 13 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -287,12 +284,15 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 19 / storage = 176 B / avg = 9 B
-# current buf: size = 8174 B / used = 176 B / count = 19 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 200 B / avg = 10 B
+# current buf: size = 8174 B / used = 200 B / count = 20 / avg = 10 B
 
-# strcache performance: lookups = 22 / hit rate = 13%
+# strcache  
+make: *** No rule to make target 'all'.  Stop.
+
+performance: lookups = 23 / hit rate = 13%
 # hash-table stats:
-# Load=19/8192=0%, Rehash=0, Collisions=0/22=0%
-# Finished Make data base on Sun Apr 12 20:53:07 2026
+# Load=20/8192=0%, Rehash=0, Collisions=0/23=0%
+# Finished Make data base on Fri May 29 17:18:35 2026
 
  
