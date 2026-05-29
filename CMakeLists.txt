@@ -1,72 +1,61 @@
-cmake_minimum_required(VERSION 3.10)
-project(NetworkMonitor VERSION 1.0)
+cmake_minimum_required(VERSION 3.14)
+project(NetworkMonitor)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(THIRD_PARTY_DIR "${CMAKE_SOURCE_DIR}")
-set(OpenGL_GL_PREFERENCE GLVND)
+set(THIRD_PARTY_DIR ${PROJECT_SOURCE_DIR}/external)
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
 
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
+find_package(PostgreSQL REQUIRED)
+find_package(CURL REQUIRED)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(ZMQ REQUIRED libzmq)
-find_package(PostgreSQL REQUIRED)
-
-find_package(nlohmann_json QUIET)
-if(NOT nlohmann_json_FOUND)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/json.hpp")
-        add_library(nlohmann_json INTERFACE)
-        target_include_directories(nlohmann_json INTERFACE ${CMAKE_SOURCE_DIR})
-    else()
-        message(FATAL_ERROR "nlohmann/json not found")
-    endif()
-endif()
 
 add_library(imgui STATIC
-    ${THIRD_PARTY_DIR}/imgui/imgui.cpp
-    ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp
-    ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp
-    ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp
-    ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
+    ${THIRD_PARTY_DIR}/imgui/imgui.cpp ${THIRD_PARTY_DIR}/imgui/imgui_draw.cpp
+    ${THIRD_PARTY_DIR}/imgui/imgui_tables.cpp ${THIRD_PARTY_DIR}/imgui/imgui_widgets.cpp
     ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_sdl2.cpp
+    ${THIRD_PARTY_DIR}/imgui/backends/imgui_impl_opengl3.cpp
 )
-target_include_directories(imgui PUBLIC 
-    ${THIRD_PARTY_DIR}/imgui
-    ${THIRD_PARTY_DIR}/imgui/backends
-    ${SDL2_INCLUDE_DIRS}
-)
+target_include_directories(imgui PUBLIC ${THIRD_PARTY_DIR}/imgui ${THIRD_PARTY_DIR}/imgui/backends ${SDL2_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR})
 target_compile_options(imgui PRIVATE -fPIC)
 
 add_library(implot STATIC
-    ${THIRD_PARTY_DIR}/implot/implot.cpp
-    ${THIRD_PARTY_DIR}/implot/implot_items.cpp
+    ${THIRD_PARTY_DIR}/implot/implot.cpp ${THIRD_PARTY_DIR}/implot/implot_items.cpp
 )
 target_include_directories(implot PUBLIC ${THIRD_PARTY_DIR}/implot)
 target_link_libraries(implot PRIVATE imgui)
 target_compile_options(implot PRIVATE -fPIC)
 
-add_executable(server main.cpp)
-
-target_include_directories(server PRIVATE 
-    ${CMAKE_SOURCE_DIR}
-    ${SDL2_INCLUDE_DIRS}
-    ${GLEW_INCLUDE_DIRS}
-    ${ZMQ_INCLUDE_DIRS}
-    ${PostgreSQL_INCLUDE_DIRS}
+set(PROJECT_SOURCES
+    ${SRC_DIR}/main.cpp 
+    ${SRC_DIR}/data_structures.cpp 
+    ${SRC_DIR}/database.cpp
+    ${SRC_DIR}/gui.cpp 
+    ${SRC_DIR}/mercator.cpp 
+    ${SRC_DIR}/server.cpp 
+    ${SRC_DIR}/tile_cache.cpp
+    ${SRC_DIR}/idw_heatmap.cpp 
 )
 
-target_link_libraries(server PRIVATE
-    imgui
-    implot
-    nlohmann_json::nlohmann_json
-    ${SDL2_LIBRARIES}
-    ${OPENGL_LIBRARIES}
-    ${GLEW_LIBRARIES}
-    ${ZMQ_LIBRARIES}
-    PostgreSQL::PostgreSQL
-    pthread
+add_executable(main ${PROJECT_SOURCES})
+target_include_directories(main PRIVATE
+    ${SRC_DIR} 
+    ${THIRD_PARTY_DIR}/imgui 
+    ${THIRD_PARTY_DIR}/implot
+    ${THIRD_PARTY_DIR}/json/single_include 
+    ${THIRD_PARTY_DIR}/stb
+    ${SDL2_INCLUDE_DIRS} 
+    ${ZMQ_INCLUDE_DIRS} 
+    ${CURL_INCLUDE_DIRS} 
+    ${OPENGL_INCLUDE_DIR}
 )
 
-target_compile_options(server PRIVATE -Wall -Wextra -O2)
+target_link_libraries(main PRIVATE
+    imgui implot PostgreSQL::PostgreSQL CURL::libcurl ${SDL2_LIBRARIES} 
+    ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${ZMQ_LIBRARIES} pthread
+)
