@@ -1,7 +1,7 @@
 #include "gui.h"
 #include "data_structures.h"
 #include "database.h"
-#include "tile_cache.h"
+#include "tiles.h"
 #include "mercator.h"
 #include "idw_heatmap.h"
 
@@ -257,6 +257,90 @@ void ImportJsonToDB(PGconn* con, const std::string& filepath) {
     std::cout << "[Import] Inserted: " << inserted << ",Skipped: " << skipped << "\n";
 }
 
+
+static void DrawMetricPlot(const char* plot_id,
+                           const char* y_label,
+                           double y_min, double y_max,
+                           const SignalHistory& hist,
+                           const std::map<int, std::string>& pci_types)
+{
+    ImPlot::SetupAxes("Time (packets)", y_label);
+    ImPlot::SetupAxisLimits(ImAxis_Y1, y_min, y_max, ImGuiCond_Once);
+    ImPlot::SetupAxisLimits(ImAxis_X1, 0, hist.max_points, ImGuiCond_Once);
+    ImPlot::SetupLegend(ImPlotLocation_NorthEast, ImPlotLegendFlags_Outside);
+
+    int count = (int)hist.x.size();
+    if (count == 0) return;
+
+    for (const auto& [pci, values] : hist.streams_y) {
+        if ((int)values.size() != count) continue;
+
+        std::string net_type = "?";
+        auto it = pci_types.find(pci);
+        if (it != pci_types.end()) net_type = it->second;
+
+        float last_val = values.back();
+        char label[64];
+        if (last_val > -144.0f)
+            snprintf(label, sizeof(label), "PCI %d [%s]  %.0f",
+                     pci, net_type.c_str(), (double)last_val);
+        else
+            snprintf(label, sizeof(label), "PCI %d [%s]  --",
+                     pci, net_type.c_str());
+
+        ImPlot::PlotLine(label, hist.x.data(), values.data(), count);
+
+        if (last_val > -144.0f) {
+            float last_x = hist.x.back();
+            ImPlot::PlotScatter(
+                ("##m" + std::to_string(pci) + plot_id).c_str(),
+                &last_x, &last_val, 1);
+        }
+    }
+}
+ 
+
+void RenderSignalGraphs() {
+    ImGui::SetNextWindowSize(ImVec2(700, 650), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Signal Graphs");
+ 
+    SignalHistory snap_rsrp, snap_rssi, snap_sinr;
+    std::map<int, std::string> snap_pci_types;
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        snap_rsrp      = data_store.history_rsrp;
+        snap_rssi      = data_store.history_rssi;
+        snap_sinr      = data_store.history_sinr;
+        snap_pci_types = data_store.pci_types;
+    }
+ 
+    const float plot_h = 200.0f;
+ 
+    if (ImPlot::BeginPlot("##RSRP", ImVec2(-1, plot_h))) {
+        DrawMetricPlot("rsrp", "RSRP (dBm)", -130.0, -44.0,
+                       snap_rsrp, snap_pci_types);
+        ImPlot::EndPlot();
+    }
+ 
+    ImGui::Spacing();
+ 
+    if (ImPlot::BeginPlot("##RSSI", ImVec2(-1, plot_h))) {
+        DrawMetricPlot("rssi", "RSSI (dBm)", -113.0, -51.0,
+                       snap_rssi, snap_pci_types);
+        ImPlot::EndPlot();
+    }
+ 
+    ImGui::Spacing();
+ 
+    if (ImPlot::BeginPlot("##SINR", ImVec2(-1, plot_h))) {
+        DrawMetricPlot("sinr", "SINR (dB)", -20.0, 30.0,
+                       snap_sinr, snap_pci_types);
+        ImPlot::EndPlot();
+    }
+ 
+    ImGui::End();
+}
+
 void RunGUI() {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) return;
     SDL_Window* window = SDL_CreateWindow("Network Analyzer", SDL_WINDOWPOS_CENTERED,
@@ -293,6 +377,7 @@ void RunGUI() {
             start_server = false; std::this_thread::sleep_for(std::chrono::milliseconds(200)); start_server = true;
         }
         ImGui::End();
+        
 
         ImGui::Begin("OpenStreetMap");
         if (ImGui::Button("-", ImVec2(30, 0))) zoom = std::max(zoom - 1, 1);
@@ -384,8 +469,7 @@ void RunGUI() {
                 }
                 ImGui::EndDisabled();
             } else {
-                ImGui::ProgressBar(g_heatmap_gen.getProgress(), ImVec2(-1, 20));
-                ImGui::SameLine(); if (ImGui::Button("Cancel")) g_heatmap_gen.cancel();
+                ImGui::Text("Loading...");
             }
             if (g_heatmap_ready && !g_heatmap_visible && !g_heatmap_load_failed) {
                 ImGui::TextColored(ImVec4(0,1,0,1), "Generated!");
@@ -420,9 +504,9 @@ void RunGUI() {
                 if (wheel != 0) zoom = std::clamp(zoom + (int)wheel, 1, 19);
             }
             double mercator_left = viewLon - span, mercator_right = viewLon + span;
-            double mercator_bottom = LatToMercatorY(viewLat - span), mercator_top = LatToMercatorY(viewLat + span);
-            int minX = (int)floor(MercatorXToTileX(mercator_left, zoom)), maxX = (int)floor(MercatorXToTileX(mercator_right, zoom));
-            int minY = (int)floor(MercatorYToTileY(mercator_top, zoom)), maxY = (int)floor(MercatorYToTileY(mercator_bottom, zoom));
+            double mercator_bottom = LatToY(viewLat - span), mercator_top = LatToY(viewLat + span);
+            int minX = (int)floor(XToTileX(mercator_left, zoom)), maxX = (int)floor(XToTileX(mercator_right, zoom));
+            int minY = (int)floor(YToTileY(mercator_top, zoom)), maxY = (int)floor(YToTileY(mercator_bottom, zoom));
             int maxTileCount = (1 << zoom) - 1;
             minX = std::max(0, std::min(minX, maxTileCount)); maxX = std::max(0, std::min(maxX, maxTileCount));
             minY = std::max(0, std::min(minY, maxTileCount)); maxY = std::max(0, std::min(maxY, maxTileCount));
@@ -437,9 +521,9 @@ void RunGUI() {
                 GLuint gpuId = 0;
                 { std::lock_guard<std::mutex> lock(g_CacheMutex); auto it = g_TileCache.find(tileId); if (it != g_TileCache.end()) { auto& tex = it->second; if (!tex.rgbaBlob.empty() && tex.id == 0) { glGenTextures(1, &tex.id); glBindTexture(GL_TEXTURE_2D, tex.id); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex.width, tex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.rgbaBlob.data()); tex.rgbaBlob.clear(); } gpuId = tex.id; } }
                 if (gpuId != 0) {
-                    double left = TileXToMercatorX(x, zoom), right = TileXToMercatorX(x+1, zoom);
-                    double top_merc = TileYToMercatorY(y, zoom), bottom_merc = TileYToMercatorY(y+1, zoom);
-                    double top_lat = MercatorYToLat(top_merc), bottom_lat = MercatorYToLat(bottom_merc);
+                    double left = TileXToX(x, zoom), right = TileXToX(x+1, zoom);
+                    double top_merc = TileYToY(y, zoom), bottom_merc = TileYToY(y+1, zoom);
+                    double top_lat = YToLat(top_merc), bottom_lat = YToLat(bottom_merc);
                     ImPlot::PlotImage(("##tile_" + tileId).c_str(), (ImTextureID)(intptr_t)gpuId, ImPlotPoint{left, bottom_lat}, ImPlotPoint{right, top_lat});
                 }
             }
@@ -458,6 +542,8 @@ void RunGUI() {
         }
         ImGui::Text("Center: %.6f, %.6f | Zoom: %d", viewLat, viewLon, zoom);
         ImGui::End();
+
+        RenderSignalGraphs();
 
         ImGui::Render();
         int w, h; SDL_GL_GetDrawableSize(window, &w, &h);

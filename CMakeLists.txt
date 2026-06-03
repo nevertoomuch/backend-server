@@ -38,7 +38,7 @@ set(PROJECT_SOURCES
     ${SRC_DIR}/gui.cpp 
     ${SRC_DIR}/mercator.cpp 
     ${SRC_DIR}/server.cpp 
-    ${SRC_DIR}/tile_cache.cpp
+    ${SRC_DIR}/tiles.cpp
     ${SRC_DIR}/idw_heatmap.cpp 
 )
 

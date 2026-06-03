@@ -18,9 +18,9 @@ void RunServer(PGconn* db_con) {
 
     try {
         socket.bind("tcp://*:7777");
-        std::cout << "[ZMQ Server] Started on port 7777. Waiting..." << std::endl;
+        std::cout << "[ZMQ Server] 7777 waiting..." << std::endl;
     } catch (const zmq::error_t& e) {
-        std::cerr << "[ZMQ Error] Bind failed: " << e.what() << std::endl;
+        std::cerr << "[ZMQ Error] failed: " << e.what() << std::endl;
         return;
     }
 
@@ -44,24 +44,34 @@ void RunServer(PGconn* db_con) {
                 data_store.alt = std::to_string(j.value("alt", 0.0));
                 data_store.acc = std::to_string(j.value("acc", 0.0));
                 
-                if (j.contains("cell_data") && j["cell_data"].contains("cells")) {
+                    if (j.contains("cell_data") && j["cell_data"].contains("cells")) {
                     auto& cells = j["cell_data"]["cells"];
-                    data_store.history.add_points(cells);
-                    
+
+                    data_store.history_rsrp.add_points(cells, "rsrp");
+                    data_store.history_rssi.add_points(cells, "rssi");
+                    data_store.history_sinr.add_points(cells, "sinr");
+
                     for (auto& cell : cells) {
                         if (cell.value("registered", false) || cell.value("pci", -1) != -1) {
                             data_store.type = cell.value("type", "N/A");
+
                             float rsrp_val = -145.0f;
-                            
                             if (data_store.type == "LTE")
-                                rsrp_val = cell["signal"].value("rsrp", -145.0f);
+                                rsrp_val = cell.value("rsrp", -145.0f);
                             else if (data_store.type == "NR")
-                                rsrp_val = cell["signal"].value("ssRsrp", -145.0f);
+                                rsrp_val = cell.value("ssRsrp", -145.0f);
                             else if (data_store.type == "GSM")
-                                rsrp_val = cell["signal"].value("dbm", -145.0f);
-                            
+                                rsrp_val = cell.value("dbm", -145.0f);
+
+                            if (rsrp_val <= -145.0f && cell.contains("signal"))
+                                rsrp_val = cell["signal"].value("rsrp", -145.0f);
+
                             data_store.current_rsrp = rsrp_val;
-                            
+
+                            int pci = cell.value("pci", -1);
+                            if (pci >= 0)
+                                data_store.pci_types[pci] = data_store.type;
+
                             std::string s_rsrp = std::to_string(rsrp_val);
                             const char* params[6] = {
                                 data_store.lat.c_str(), data_store.lon.c_str(),
@@ -69,10 +79,14 @@ void RunServer(PGconn* db_con) {
                                 data_store.type.c_str(), s_rsrp.c_str()
                             };
                             SaveDataToDB(params, db_con);
-                            
-                            log_messages.push_back("Recv: " + data_store.type + " | RSRP: " + s_rsrp);
-                            if (log_messages.size() > 50) log_messages.erase(log_messages.begin());
-                            
+
+                            log_messages.push_back(
+                                "Recv: " + data_store.type +
+                                " PCI=" + std::to_string(pci) +
+                                " RSRP=" + s_rsrp);
+                            if (log_messages.size() > 50)
+                                log_messages.erase(log_messages.begin());
+
                             break;
                         }
                     }
@@ -81,11 +95,11 @@ void RunServer(PGconn* db_con) {
                 session_data_counter++;
                 
             } catch (const std::exception& e) {
-                std::cerr << "[Data Error] Failed to process JSON: " << e.what() << std::endl;
+                std::cerr << "[Data Error] Failed JSON: " << e.what() << std::endl;
             }
             socket.send(zmq::buffer(std::string("OK")), zmq::send_flags::none);
         }
     }
     
-    std::cout << "[ZMQ Server] Thread stopped." << std::endl;
+    std::cout << "[ZMQ Server] Stopped." << std::endl;
 }

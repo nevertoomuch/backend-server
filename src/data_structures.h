@@ -11,8 +11,9 @@ struct SignalHistory {
     std::map<int, std::vector<float>> streams_y;
     std::vector<float> x;
     float current_step = 0;
-    const int max_points = 200;
-    void add_points(const json& cells_array);
+    int max_points = 200; 
+
+    void add_points(const json& cells_array, const std::string& metric);
     void clear();
     bool empty() const;
 };
@@ -21,8 +22,8 @@ struct OfflineData {
     std::vector<double> lats;
     std::vector<double> lons;
     std::vector<double> rsrps;
-    std::vector<double> rsrqs;        
-    std::vector<double> rssis; 
+    std::vector<double> rsrqs;
+    std::vector<double> rssis;
     std::vector<double> altitudes;
     std::vector<int> earfcns;
     std::vector<int> pcis;
@@ -35,13 +36,17 @@ struct OfflineData {
 struct Telemetry {
     std::string lat = "0", lon = "0", alt = "0", acc = "0", type = "N/A";
     float current_rsrp = -140.0f;
-    SignalHistory history;
+
+    SignalHistory history_rsrp;
+    SignalHistory history_rssi;
+    SignalHistory history_sinr;
+
     std::map<int, std::string> pci_types;
-    std::vector<std::string> pending_records;
+    std::vector<std::string>   pending_records;
 };
 
 extern OfflineData offline_store;
-extern Telemetry data_store;
-extern std::mutex mtx;
+extern Telemetry   data_store;
+extern std::mutex  mtx;
 extern std::vector<std::string> log_messages;
 extern int session_data_counter;
